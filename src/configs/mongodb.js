@@ -9,9 +9,9 @@ mongoose.connection.on('error', (err) => console.log(err));
 mongoose.set('strictQuery', false);
 
 export async function connectToDB() {
-	try {
-		await mongoose.connect(DB_URL);
-	} catch (err) {
-		console.log(err);
-	}
+    try {
+        await mongoose.connect(DB_URL);
+    } catch (err) {
+        console.log(err);
+    }
 }

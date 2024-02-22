@@ -1,0 +1,300 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "airbnb",
+        "airbnb/hooks",
+        "plugin:jsx-a11y/recommended",
+        "plugin:perfectionist/recommended-natural",
+        "eslint-config-prettier"
+    ],
+    "plugins": ["prettier"],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "moduleDirectory": ["node_modules", "src/"]
+            },
+            "alias": {
+                "map": [["@", "./src"]],
+                "extensions": [".js", ".jsx"]
+            }
+        }
+    },
+    "rules": {
+        "prettier/prettier": 2,
+        "import/order": "off",
+        "sort-imports": "off",
+        "no-console": "off",
+        "import/prefer-default-export": "off",
+        "camelcase": "off",
+        "curly": ["error", "all"],
+        "react/jsx-props-no-spreading": "off",
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": [
+                    "**/*.config.js",
+                    "**/*.stories.jsx",
+                    "src/mocks/**/*.js",
+                    "tests/**/*.js",
+                    "**/*.test.jsx",
+                    "**/*.spec.jsx"
+                ]
+            }
+        ],
+        "react/react-in-jsx-scope": "off",
+        "react/prop-types": 0,
+        "no-var": "error",
+        "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
+        "react/display-name": "off",
+        "react/jsx-filename-extension": [
+            "warn",
+            {
+                "extensions": [".js", ".jsx"]
+            }
+        ],
+        "react/function-component-definition": [
+            2,
+            {
+                "namedComponents": "arrow-function",
+                "unnamedComponents": "arrow-function"
+            }
+        ],
+        "padding-line-between-statements": [
+            "error",
+            { "blankLine": "always", "prev": "export", "next": "export" }, //space before/between export
+            {
+                "blankLine": "always",
+                "prev": ["let", "var", "import", "if", "try", "multiline-expression"],
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": [
+                    "let",
+                    "var",
+                    "import",
+                    "try",
+                    "return",
+                    "if",
+                    "multiline-expression",
+                    "export",
+                    "multiline-const"
+                ]
+            },
+            {
+                "blankLine": "any",
+                "prev": ["let", "var", "import"],
+                "next": ["let", "var", "import"]
+            }
+        ],
+        "lines-around-comment": [
+            "error",
+            { "beforeBlockComment": true, "allowBlockStart": true, "beforeLineComment": false }
+        ],
+        "perfectionist/sort-objects": [
+            "error",
+            {
+                "type": "natural",
+                "order": "asc"
+            }
+        ],
+        "perfectionist/sort-imports": [
+            "error",
+            {
+                "type": "natural",
+                "order": "asc",
+                "groups": [
+                    "type",
+                    "react",
+                    "nanostores",
+                    ["builtin", "external"],
+                    "internal-type",
+                    "internal",
+                    ["parent-type", "sibling-type", "index-type"],
+                    ["parent", "sibling", "index"],
+                    "side-effect",
+                    "style",
+                    "object",
+                    "unknown"
+                ],
+                "custom-groups": {
+                    "value": {
+                        "react": ["react", "react-*"],
+                        "nanostores": "@nanostores/**"
+                    },
+                    "type": {
+                        "react": "react"
+                    }
+                },
+                "newlines-between": "always",
+                "internal-pattern": ["@/**"]
+            }
+        ]
+    }
+}
+
+
+
+
+{
+  "name": "skote-redux-vite",
+  "private": true,
+  "version": "2.0.1",
+  "homepage": ".",
+  "scripts": {
+    "release": "release-it",
+    "release:patch": "release-it --patch --ci",
+    "release:patchbuild": "release-it patch --preRelease",
+    "release:minorbuild": "release-it minor --preRelease",
+    "release:majorbuild": "release-it major --preRelease",
+    "dev": "vite",
+    "build": "vite build",
+    "build:staging": "vite build --mode staging",
+    "build:testing": "vite build --mode testing",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write \"**/*.{js,jsx,json,md,html,css,less,scss}\"",
+    "test": "vitest",
+    "testui": "vitest --ui",
+    "coverage": "vitest run --coverage",
+    "prepare": "husky install",
+    "preinstall": "npx only-allow pnpm",
+    "cz": "cz"
+  },
+  "dependencies": {
+    "@ebay/nice-modal-react": "^1.2.8",
+    "@iconify/react": "^4.0.0",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@tanstack/react-table": "^8.5.13",
+    "apexcharts": "3.35.0",
+    "async-mutex": "^0.4.0",
+    "axios": "^0.26.1",
+    "bootstrap": "^5.1.3",
+    "broadcast-channel": "^5.1.0",
+    "chartist": "^0.11.4",
+    "classnames": "^2.3.2",
+    "clientjs": "^0.2.1",
+    "cookiejs": "^2.1.2",
+    "copy-to-clipboard": "^3.3.3",
+    "crypto-js": "^4.1.1",
+    "date-fns": "^2.29.3",
+    "dot-object": "^2.1.4",
+    "echarts": "^4.9.0",
+    "echarts-for-react": "^3.0.2",
+    "financial-number": "^4.0.2",
+    "formik": "^2.2.9",
+    "i18next": "^21.6.16",
+    "i18next-browser-languagedetector": "^6.1.4",
+    "i18next-resources-to-backend": "^1.1.4",
+    "is-my-ip-valid": "^1.0.1",
+    "is-valid-domain": "^0.1.6",
+    "is-what": "^4.1.15",
+    "js-cookie": "^3.0.1",
+    "lodash": "^4.17.21",
+    "lodash.get": "^4.4.2",
+    "lodash.isequal": "^4.5.0",
+    "lodash.map": "^4.6.0",
+    "lodash.pickby": "^4.6.0",
+    "lodash.union": "^4.6.0",
+    "prop-types": "^15.7.2",
+    "react": "^18.2.0",
+    "react-auth-code-input": "^3.2.1",
+    "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.0",
+    "react-i18next": "^11.10.0",
+    "react-icons": "^4.4.0",
+    "react-loader-spinner": "^5.3.4",
+    "react-player": "^2.13.0",
+    "react-redux": "^8.1.2",
+    "react-router-dom": "^6.4.1",
+    "react-select": "^5.7.4",
+    "react-tooltip": "^4.4.3",
+    "reactstrap": "^9.0.1",
+    "simplebar-react": "^2.3.6",
+    "sort-array": "^4.1.5",
+    "tldjs": "^2.3.1",
+    "toastr": "^2.1.4",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@axe-core/react": "^4.8.1",
+    "@commitlint/cli": "^17.7.1",
+    "@commitlint/config-conventional": "^17.7.0",
+    "@digitalroute/cz-conventional-changelog-for-jira": "^8.0.1",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.0.1",
+    "@testing-library/user-event": "^14.5.1",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@vitejs/plugin-react": "^4.0.4",
+    "@vitest/coverage-istanbul": "^0.34.4",
+    "@vitest/ui": "^0.34.4",
+    "auto-changelog": "^2.4.0",
+    "commitizen": "^4.3.0",
+    "eslint": "^8.48.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-perfectionist": "^1.5.1",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "husky": "^8.0.0",
+    "jsdom": "^22.1.0",
+    "lint-staged": "^14.0.1",
+    "msw": "^1.3.1",
+    "prettier": "^3.0.3",
+    "release-it": "^16.2.1",
+    "rollup-plugin-visualizer": "^5.9.2",
+    "sass": "^1.66.1",
+    "storybook-addon-react-router-v6": "^2.0.7",
+    "stylelint": "^15.10.3",
+    "stylelint-config-recess-order": "^4.3.0",
+    "stylelint-config-standard": "^34.0.0",
+    "stylelint-config-standard-scss": "^11.0.0",
+    "stylelint-prettier": "^4.0.2",
+    "vite": "^4.4.9",
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-inspect": "^0.7.38",
+    "vite-plugin-remove-console": "^2.1.1",
+    "vite-plugin-svgr": "^3.2.0",
+    "vitest": "^0.34.3"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "resolutions": {
+    "moment": "2.29.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/@digitalroute/cz-conventional-changelog-for-jira",
+      "jiraOptional": true,
+      "jiraPrefix": "AC",
+      "jiraLocation": "pre-description"
+    }
+  }
+}

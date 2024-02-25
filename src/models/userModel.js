@@ -6,19 +6,18 @@ const userSchema = new Schema(
     {
         username: {
             type: String,
-            required: true,
-            unique: true
+            required: true
         },
         email: {
             type: String,
             required: true,
             unique: true,
-            lowercase: true,
-            validate: [validator.isEmail, 'Please provide a valid email']
+            lowercase: [true, 'Custom|Email should be in lowercase.'],
+            validate: [validator.isEmail, 'Custom|Please provide a valid email.']
         },
         password: {
             type: String,
-            minlength: [8, 'Password should be atleast 8 characters long.'],
+            minlength: [8, 'Custom|Password should be atleast 8 characters long.'],
             required: true
         }
     },

@@ -1,5 +1,4 @@
 import User from '../models/userModel.js';
-
 import ApiErrors from '../utils/api-errors/index.js';
 import { catchExceptions } from '../utils/errorHandlers.js';
 
@@ -34,14 +33,14 @@ export const registerUser = catchExceptions(async (req, res, next) => {
 export const loginUser = catchExceptions(async (req, res, next) => {
     const { email, password } = req.body;
 
-    //check if email or password not present in request body
+    // check if email or password not present in request body
     if (!email || !password) {
         return next(ApiErrors.MISSING_PARAMETERS);
     }
 
     const user = await User.findOne({ email });
 
-    //if user corresponding to the given mail does not exist
+    // if user corresponding to the given mail does not exist
     if (!user) {
         return next(ApiErrors.USER_NOT_EXIST);
     }

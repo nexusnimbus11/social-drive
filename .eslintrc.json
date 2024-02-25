@@ -1,0 +1,82 @@
+{
+    "env": {
+        "node": true,
+        "es2021": true
+    },
+    "extends": ["airbnb-base", "eslint-config-prettier"],
+    "plugins": ["prettier", "@stylistic/eslint-plugin", "perfectionist"],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "settings": { "import/resolver": "node" },
+    "rules": {
+        "no-console": "off",
+        "import/prefer-default-export": "off",
+        "func-names": "off",
+        "prettier/prettier": 2,
+        "consistent-return": "off",
+        "import/extensions": "off",
+        "import/order": "off",
+        "sort-imports": "off",
+        "camelcase": "off",
+        "curly": ["error", "all"],
+        "no-var": "error",
+        "no-unused-vars": [
+            "error",
+            { "vars": "all", "args": "none", "ignoreRestSiblings": false }
+        ],
+        "@stylistic/padding-line-between-statements": [
+            "error",
+            { "blankLine": "always", "prev": "export", "next": "export" }, //space before/between export
+            {
+                "blankLine": "always",
+                "prev": ["let", "var", "import", "if", "try", "multiline-expression"],
+                "next": "*"
+            },
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": [
+                    "let",
+                    "var",
+                    "import",
+                    "try",
+                    "return",
+                    "if",
+                    "multiline-expression",
+                    "export",
+                    "multiline-const"
+                ]
+            },
+            {
+                "blankLine": "any",
+                "prev": ["let", "var", "const", "import"],
+                "next": ["let", "var", "const", "import"]
+            }
+        ],
+        "lines-around-comment": [
+            "error",
+            {
+                "beforeBlockComment": true,
+                "allowBlockStart": true,
+                "beforeLineComment": false
+            }
+        ],
+        "perfectionist/sort-imports": [
+            "error",
+            {
+                "type": "natural",
+                "order": "asc",
+                "groups": [
+                    ["builtin", "external"],
+                    "internal",
+                    ["parent", "sibling", "index"],
+                    "unknown"
+                ],
+                "newlines-between": "always",
+                "internal-pattern": ["@/**"]
+            }
+        ]
+    }
+}

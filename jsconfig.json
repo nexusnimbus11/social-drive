@@ -1,0 +1,8 @@
+// jsconfig.json at project root
+
+{
+    "compilerOptions": {
+        "module": "ES6"
+    },
+    "exclude": ["node_modules", "**/node_modules/*"]
+}

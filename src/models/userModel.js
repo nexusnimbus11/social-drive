@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
+import { Schema, model } from 'mongoose';
 import validator from 'validator';
 
 const userSchema = new Schema(
@@ -28,7 +28,9 @@ const userSchema = new Schema(
 
 // Match user entered password to hashed password in database
 userSchema.methods.matchPassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
+    const response = await bcrypt.compare(enteredPassword, this.password);
+
+    return response;
 };
 
 userSchema.pre('save', async function (next) {

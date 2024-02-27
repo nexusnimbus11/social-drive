@@ -34,10 +34,8 @@ const getErrorResponseData = (err) => {
  * Invokes user defined express error middleware function on error.
  * @param fn - an async function
  */
-export const catchExceptions = (fn) => {
-    return (req, res, next) =>
-        fn(req, res, next).catch((err) => {
-            const errorResData = getErrorResponseData(err);
-            next(errorResData);
-        });
-};
+export const catchExceptions = (fn) => (req, res, next) =>
+    fn(req, res, next).catch((err) => {
+        const errorResData = getErrorResponseData(err);
+        next(errorResData);
+    });

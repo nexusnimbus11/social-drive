@@ -1,0 +1,38 @@
+<!-- A temporary file that will be removed once frontend is in development -->
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <button
+            id="google-signin"
+            style="background-color: blue; color: white; padding: 8px 32px"
+        >
+            Sign in with Google
+        </button>
+
+        <script>
+            const FETCH_AUTH_URL = 'http://localhost:8080/oauth/google/generateUrl';
+
+            const btn = document.getElementById('google-signin');
+
+            const openGoogleConsentScreen = async () => {
+                try {
+                    const res = await fetch(FETCH_AUTH_URL);
+                    const data = await res.json();
+
+                    console.log(data);
+
+                    window.open(data.auth_url);
+                } catch (err) {
+                    console.log(err);
+                }
+            };
+
+            btn.addEventListener('click', openGoogleConsentScreen);
+        </script>
+    </body>
+</html>

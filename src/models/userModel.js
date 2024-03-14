@@ -19,7 +19,8 @@ const userSchema = new Schema(
             type: String,
             minlength: [8, 'Custom|Password should be atleast 8 characters long.'],
             required: true
-        }
+        },
+        googleToken: String
     },
     {
         timestamps: true
@@ -35,8 +36,7 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 
 userSchema.pre('save', async function (next) {
     // Encrypt password using bcrypt
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+    this.password = await bcrypt.hash(this.password, 10);
 
     next();
 });

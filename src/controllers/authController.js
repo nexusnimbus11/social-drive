@@ -4,6 +4,7 @@ import { getGoogleAuthUrl, getOAuth2Client } from '../configs/googleOAuth2Client
 import User from '../models/userModel.js';
 import ApiErrors from '../utils/api-errors/index.js';
 import { catchExceptions } from '../utils/errorHandlers.js';
+import { getUserInfoFromIdToken } from '../services/google.js';
 
 export const registerUser = catchExceptions(async (req, res, next) => {
     const { username, email, password } = req.body;
@@ -87,14 +88,26 @@ export const generateGoogleAuthUrl = catchExceptions(async (req, res, next) => {
  * through the client side
  */
 export const googleAuthCallbackHandler = catchExceptions(async (req, res, next) => {
+    // get code present in redirect URI
     const qs = new url.URL(req.url, 'http://localhost:3000').searchParams;
     const code = qs.get('code');
 
+    // get google tokens using the oauth2 client
     const oAuth2Client = getOAuth2Client();
-    const tokenRes = await oAuth2Client.getToken(code);
-    oAuth2Client.setCredentials(tokenRes.tokens);
+    const { tokens } = await oAuth2Client.getToken(code);
+    oAuth2Client.setCredentials(tokens);
 
-    console.log(tokenRes.tokens);
+    const { email } = await getUserInfoFromIdToken(tokens.id_token, oAuth2Client);
+
+    const user = await User.findOne({ email });
+
+    // TODO: If user is not present, create a new user otherwise update the existing info
+    if (!user) {
+        return next(ApiErrors.USER_NOT_EXIST);
+    }
+
+    user.googleToken = tokens.access_token;
+    await user.save();
 
     res.sendStatus(200);
 });

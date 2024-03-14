@@ -2,6 +2,7 @@ import { OAuth2Client } from 'google-auth-library';
 
 /**
  * Creates an oAuth2 client to authorize the API call
+ * @returns {OAuth2Client} client
  */
 export function getOAuth2Client() {
     const oAuth2Client = new OAuth2Client(
@@ -19,7 +20,7 @@ export function getOAuth2Client() {
  */
 export function getGoogleAuthUrl(client) {
     const authorizeUrl = client.generateAuthUrl({
-        access_type: 'offline',
+        access_type: 'online',
         scope: ['openid', 'profile', 'email'].join(' '),
         prompt: 'consent'
     });

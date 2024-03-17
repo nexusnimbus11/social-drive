@@ -134,17 +134,24 @@ export const googleAuthCallbackHandler = catchExceptions(async (req, res, next) 
     const { tokens } = await oAuth2Client.getToken(code);
     oAuth2Client.setCredentials(tokens);
 
-    const { email } = await getUserInfoFromIdToken(tokens.id_token, oAuth2Client);
+    const { email, fullName } = await getUserInfoFromIdToken(
+        tokens.id_token,
+        oAuth2Client
+    );
 
     const user = await User.findOne({ email });
 
-    // TODO: If user is not present, create a new user otherwise update the existing info
+    // If user is not present, create a new user otherwise update the existing info
     if (!user) {
-        return next(ApiErrors.USER_NOT_EXIST);
+        await User.create({
+            username: fullName,
+            email,
+            googleToken: tokens.access_token
+        });
+    } else {
+        user.googleToken = tokens.access_token;
+        await user.save();
     }
-
-    user.googleToken = tokens.access_token;
-    await user.save();
 
     res.sendStatus(200);
 });

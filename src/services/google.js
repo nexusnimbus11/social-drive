@@ -71,12 +71,3 @@ export async function getUserInfoFromIdToken(idToken, client) {
         return null;
     }
 }
-
-// const { access_token, token_type } = tokenRes.tokens;
-
-//     // const userData = await getUserInfoFromIdToken(tokenRes.tokens.id_token, oAuth2Client);
-//     const userData = await fetchGoogleUserInfo(`${token_type} ${access_token}`);
-
-//     if (userData) {
-//         console.log(userData);
-//     }

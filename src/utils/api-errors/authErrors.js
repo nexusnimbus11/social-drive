@@ -13,6 +13,11 @@ const AuthErrors = Object.freeze({
         status_code: 400,
         code: 'password_validation_failed',
         description: "Provided password doesn't meet our security requirements."
+    },
+    PASSWORD_LOGIN_UNAVAILABLE: {
+        status_code: 400,
+        code: 'password_login_unavailable',
+        description: 'User is not registered with password login method.'
     }
 });
 

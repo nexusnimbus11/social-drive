@@ -67,6 +67,11 @@ export const loginUserWithPassword = catchExceptions(async (req, res, next) => {
         return next(ApiErrors.USER_NOT_EXIST);
     }
 
+    // if user account does not have password, then this login method is not allowed
+    if (!user.loginMethods.includes('password')) {
+        return next(ApiErrors.PASSWORD_LOGIN_UNAVAILABLE);
+    }
+
     const doesPasswordMatch = await user.matchPassword(password);
 
     if (!doesPasswordMatch) {

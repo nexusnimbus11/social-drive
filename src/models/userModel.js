@@ -27,7 +27,12 @@ const userSchema = new Schema(
             minlength: [8, 'Custom|Password should be atleast 8 characters long.'],
             required: [isPasswordRequired, 'Custom|Password is not provided.']
         },
-        googleToken: String
+        googleToken: String,
+        loginMethods: {
+            type: [String],
+            enum: ['password', 'google'],
+            required: true
+        }
     },
     {
         timestamps: true

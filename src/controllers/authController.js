@@ -7,25 +7,43 @@ import { generateOAuthTokenPair } from '../utils/encryption.js';
 import { catchExceptions } from '../utils/errorHandlers.js';
 import { getUserInfoFromIdToken } from '../services/google.js';
 
-export const registerUser = catchExceptions(async (req, res, next) => {
+export const registerUserWithPassword = catchExceptions(async (req, res, next) => {
     const { username, email, password } = req.body;
 
     if (!username || !email || !password) {
         return next(ApiErrors.MISSING_PARAMETERS);
     }
 
-    // send error if email already exists in the DB
-    const userExists = await User.findOne({ email });
+    const user = await User.findOne({ email });
 
-    if (userExists) {
+    // send error if user already exists in the DB with password login method
+    if (user && user.loginMethods.includes('password')) {
         return next(ApiErrors.USER_ALREADY_EXISTS);
     }
 
-    // create new user
+    // If user has previously signed-in with google, then update the user's details
+    if (user.loginMethods.includes('google')) {
+        // update username if present in request body
+        user.username = username || user.username;
+        // add password to user in case user wants to login using password
+        user.password = password;
+        // add 'password' to available login methods
+        user.loginMethods = [...user.loginMethods, 'password'];
+        await user.save();
+
+        return res.status(200).json({
+            error: false,
+            code: 'password_login_added',
+            description: 'You can now login with password too.'
+        });
+    }
+
+    // create a new user if email is encountered for first time
     const newUser = await User.create({
         username,
         email: email.toLowerCase().trim(),
-        password
+        password,
+        loginMethods: ['password']
     });
 
     // issue the OAuth tokens for instant login
@@ -43,7 +61,7 @@ export const registerUser = catchExceptions(async (req, res, next) => {
     });
 });
 
-export const loginUser = catchExceptions(async (req, res, next) => {
+export const loginUserWithPassword = catchExceptions(async (req, res, next) => {
     const { email, password } = req.body;
 
     // check if email or password not present in request body
@@ -146,12 +164,30 @@ export const googleAuthCallbackHandler = catchExceptions(async (req, res, next) 
         await User.create({
             username: fullName,
             email,
-            googleToken: tokens.access_token
+            googleToken: tokens.access_token,
+            loginMethods: ['google']
         });
-    } else {
-        user.googleToken = tokens.access_token;
-        await user.save();
+
+        return res.status(201).json({
+            error: false,
+            code: 'registration_success',
+            description: 'User registered sucessfully.'
+        });
     }
 
-    res.sendStatus(200);
+    // if user is already present in the DB, then just update the access token
+    user.googleToken = tokens.access_token;
+
+    // if an already existing user has now used google for sign-in, then update his login methods
+    if (!user.loginMethods.includes('google')) {
+        user.loginMethods = [...user.loginMethods, 'google'];
+    }
+
+    await user.save();
+
+    res.status(200).json({
+        error: false,
+        code: 'login_success',
+        description: 'User authenticated successfully.'
+    });
 });

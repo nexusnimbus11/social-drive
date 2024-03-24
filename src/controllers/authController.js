@@ -22,13 +22,12 @@ export const registerUserWithPassword = catchExceptions(async (req, res, next) =
     }
 
     // If user has previously signed-in with google, then update the user's details
-    if (user.loginMethods.includes('google')) {
+    if (user && user.loginMethods.includes('google')) {
         // update username if present in request body
         user.username = username || user.username;
         // add password to user in case user wants to login using password
         user.password = password;
-        // add 'password' to available login methods
-        user.loginMethods = [...user.loginMethods, 'password'];
+
         await user.save();
 
         return res.status(200).json({
@@ -42,8 +41,7 @@ export const registerUserWithPassword = catchExceptions(async (req, res, next) =
     const newUser = await User.create({
         username,
         email: email.toLowerCase().trim(),
-        password,
-        loginMethods: ['password']
+        password
     });
 
     // issue the OAuth tokens for instant login
@@ -169,8 +167,7 @@ export const googleAuthCallbackHandler = catchExceptions(async (req, res, next) 
         await User.create({
             username: fullName,
             email,
-            googleToken: tokens.access_token,
-            loginMethods: ['google']
+            googleToken: tokens.access_token
         });
 
         return res.status(201).json({
@@ -182,12 +179,6 @@ export const googleAuthCallbackHandler = catchExceptions(async (req, res, next) 
 
     // if user is already present in the DB, then just update the access token
     user.googleToken = tokens.access_token;
-
-    // if an already existing user has now used google for sign-in, then update his login methods
-    if (!user.loginMethods.includes('google')) {
-        user.loginMethods = [...user.loginMethods, 'google'];
-    }
-
     await user.save();
 
     res.status(200).json({

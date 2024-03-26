@@ -25,6 +25,12 @@ const getErrorResponseData = (err) => {
         return handleMongooseValidationError(err);
     }
 
+    if (err.name === 'JsonWebTokenError') {
+        // this means provided JWT is invalid or expired or signature doesn't match (data has been tampered)
+        return ApiErrors.INVALID_TOKEN;
+    }
+
+    console.log(err);
     // default error
     return ApiErrors.UNKNOWN_ERROR;
 };

@@ -13,6 +13,16 @@ const AuthErrors = Object.freeze({
         status_code: 400,
         code: 'password_validation_failed',
         description: "Provided password doesn't meet our security requirements."
+    },
+    MISSING_TOKEN: {
+        status_code: 401,
+        code: 'missing_token',
+        description: 'You are unauthorized to perform this action.'
+    },
+    INVALID_TOKEN: {
+        status_code: 401,
+        code: 'invalid_token',
+        description: 'You are unauthorized to perform this action.'
     }
 });
 

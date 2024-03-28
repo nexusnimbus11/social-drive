@@ -164,16 +164,23 @@ export const googleAuthCallbackHandler = catchExceptions(async (req, res, next) 
 
     // If user is not present, create a new user otherwise update the existing info
     if (!user) {
-        await User.create({
+        const newUser = await User.create({
             username: fullName,
             email,
             googleToken: tokens.access_token
         });
 
+        const { accessToken, refreshToken } = generateOAuthTokenPair({
+            username: newUser.username,
+            email: newUser.email
+        });
+
         return res.status(201).json({
             error: false,
             code: 'registration_success',
-            description: 'User registered sucessfully.'
+            description: 'User registered sucessfully.',
+            access_token: accessToken,
+            refresh_token: refreshToken
         });
     }
 
@@ -181,9 +188,16 @@ export const googleAuthCallbackHandler = catchExceptions(async (req, res, next) 
     user.googleToken = tokens.access_token;
     await user.save();
 
+    const { accessToken, refreshToken } = generateOAuthTokenPair({
+        username: user.username,
+        email: user.email
+    });
+
     res.status(200).json({
         error: false,
         code: 'login_success',
-        description: 'User authenticated successfully.'
+        description: 'User authenticated successfully.',
+        access_token: accessToken,
+        refresh_token: refreshToken
     });
 });

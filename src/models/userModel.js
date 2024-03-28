@@ -2,6 +2,13 @@ import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
 import validator from 'validator';
 
+/**
+ * A validator function that checks whether password shhould be a required field or not
+ */
+function isPasswordRequired() {
+    return !this.googleToken;
+}
+
 const userSchema = new Schema(
     {
         username: {
@@ -18,13 +25,29 @@ const userSchema = new Schema(
         password: {
             type: String,
             minlength: [8, 'Custom|Password should be atleast 8 characters long.'],
-            required: true
-        }
+            required: [isPasswordRequired, 'Custom|Password is not provided.']
+        },
+        googleToken: String
     },
     {
         timestamps: true
     }
 );
+
+// virtual property which provides list of authentication methods user can use
+userSchema.virtual('loginMethods').get(function () {
+    const methods = [];
+
+    if (this?.password?.length) {
+        methods.push('password');
+    }
+
+    if (this?.googleToken?.length) {
+        methods.push('google');
+    }
+
+    return methods;
+});
 
 // Match user entered password to hashed password in database
 userSchema.methods.matchPassword = async function (enteredPassword) {
@@ -34,9 +57,11 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 userSchema.pre('save', async function (next) {
-    // Encrypt password using bcrypt
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+    /* Encrypt password using bcrypt if user registered using email-password method 
+       and password field is modified */
+    if (this.password && this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
 
     next();
 });

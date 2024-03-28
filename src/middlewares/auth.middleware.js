@@ -36,7 +36,7 @@ export const verifyOAuthToken = (checkRefreshToken = false) =>
         const decodedData = jwt.verify(authToken, decodingSecret);
 
         // Check if token's owner still has an active account
-        const currentUser = await User.find({ email: decodedData.email });
+        const currentUser = await User.findOne({ email: decodedData.email });
 
         if (!currentUser) {
             next(ApiErrors.INVALID_TOKEN);

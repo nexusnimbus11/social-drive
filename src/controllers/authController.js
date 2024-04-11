@@ -2,10 +2,10 @@ import url from 'url';
 
 import { getGoogleAuthUrl, getOAuth2Client } from '../configs/googleOAuth2Client.js';
 import User from '../models/userModel.js';
+import { getUserInfoFromIdToken } from '../services/google.js';
 import ApiErrors from '../utils/api-errors/index.js';
 import { generateOAuthTokenPair } from '../utils/encryption.js';
 import { catchExceptions } from '../utils/errorHandlers.js';
-import { getUserInfoFromIdToken } from '../services/google.js';
 
 export const registerUserWithPassword = catchExceptions(async (req, res, next) => {
     const { username, email, password } = req.body;
@@ -50,7 +50,7 @@ export const registerUserWithPassword = catchExceptions(async (req, res, next) =
         email: newUser.email
     });
 
-    res.status(201).json({
+    return res.status(201).json({
         error: false,
         code: 'registration_success',
         description: 'User registered sucessfully.',
@@ -91,7 +91,7 @@ export const loginUserWithPassword = catchExceptions(async (req, res, next) => {
         email: user.email
     });
 
-    res.status(200).json({
+    return res.status(200).json({
         error: false,
         code: 'login_success',
         description: 'User authenticated successfully.',
@@ -193,7 +193,7 @@ export const googleAuthCallbackHandler = catchExceptions(async (req, res, next) 
         email: user.email
     });
 
-    res.status(200).json({
+    return res.status(200).json({
         error: false,
         code: 'login_success',
         description: 'User authenticated successfully.',

@@ -13,6 +13,7 @@ export async function getUserAuthEndpoints() {
         return data;
     } catch (err) {
         console.log('Error in fetching the discovery document:\n', err);
+
         return null;
     }
 }
@@ -39,8 +40,11 @@ export async function fetchGoogleUserInfo(authenticatedClient) {
                 profileImg: picture
             };
         }
+
+        return null;
     } catch (err) {
         console.log('Error in fetching user info:\n', err);
+
         return null;
     }
 }
@@ -68,6 +72,7 @@ export async function getUserInfoFromIdToken(idToken, client) {
         };
     } catch (err) {
         console.log('Error verifying ID token: ', err);
+
         return null;
     }
 }

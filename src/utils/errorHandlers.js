@@ -31,6 +31,7 @@ const getErrorResponseData = (err) => {
     }
 
     console.log(err);
+
     // default error
     return ApiErrors.UNKNOWN_ERROR;
 };

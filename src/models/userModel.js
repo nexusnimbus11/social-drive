@@ -1,5 +1,6 @@
-import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
+
+import bcrypt from 'bcrypt';
 import validator from 'validator';
 
 /**

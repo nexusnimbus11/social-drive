@@ -15,7 +15,7 @@
         "import/prefer-default-export": "off",
         "func-names": "off",
         "prettier/prettier": 2,
-        "consistent-return": "off",
+        "consistent-return": "error",
         "import/extensions": "off",
         "import/order": "off",
         "sort-imports": "off",
@@ -68,14 +68,19 @@
             {
                 "type": "natural",
                 "order": "asc",
+                "custom-groups": {
+                    "value": {
+                        "core-packages": ["express", "mongoose"]
+                    }
+                },
                 "groups": [
+                    "core-packages",
                     ["builtin", "external"],
                     "internal",
                     ["parent", "sibling", "index"],
                     "unknown"
                 ],
-                "newlines-between": "always",
-                "internal-pattern": ["@/**"]
+                "newlines-between": "always"
             }
         ]
     }

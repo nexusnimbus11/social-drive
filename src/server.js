@@ -12,5 +12,6 @@ async function startServer() {
     await connectToDB();
     server.listen(PORT, () => console.log(`Server running on port: ${PORT}...`));
 }
+// test
 
 startServer();
